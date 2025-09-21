@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 @Data
-@Document(collation = "activities")
+@Document(collection = "activities")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,7 +26,7 @@ public class Activity {
     private ActivityType type;
     private Integer duration;
     private Integer caloriesBurned;
-    private LocalDateTime startedTime;
+    private LocalDateTime startTime;
     @Field("metrics")
     private Map<String, Object> additionalMetrics;
     @CreatedDate
