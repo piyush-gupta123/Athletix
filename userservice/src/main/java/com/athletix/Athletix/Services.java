@@ -2,13 +2,12 @@ package com.athletix.Athletix;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
-public class AthletixApplication {
+public class Services {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AthletixApplication.class, args);
+		SpringApplication.run(Services.class, args);
 		System.out.println("Started Athletix application");
 	}
 
