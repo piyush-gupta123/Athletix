@@ -6,6 +6,7 @@ import com.athletix.activityservice.dto.ActivityResponse;
 import com.athletix.activityservice.model.Activity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +18,7 @@ public class ActivityService {
     private final ActivityRepository repository;
     private final UserValidationService userValidationService;
 
+    @Transactional
     public ActivityResponse trackActivity(ActivityRequest request) {
         boolean isValid = userValidationService.validateUser(request.getUserId());
         if(!isValid){
