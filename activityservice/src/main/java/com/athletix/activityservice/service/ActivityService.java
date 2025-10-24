@@ -5,6 +5,9 @@ import com.athletix.activityservice.dto.ActivityRequest;
 import com.athletix.activityservice.dto.ActivityResponse;
 import com.athletix.activityservice.model.Activity;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,12 +16,19 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ActivityService {
 
     private final ActivityRepository repository;
     private final UserValidationService userValidationService;
+    private final RabbitTemplate rabbitTemplate;
 
-    @Transactional
+    @Value("${rabbitmq.exchange.name}")
+    private String exchange;
+
+    @Value("${rabbitmq.routing.key}")
+    private String routingKey;
+
     public ActivityResponse trackActivity(ActivityRequest request) {
         boolean isValid = userValidationService.validateUser(request.getUserId());
         if(!isValid){
@@ -34,6 +44,12 @@ public class ActivityService {
                 .build();
 
         Activity savedActivity = repository.save(activity);
+    //  Publish to RabbitMQ for AI Processing
+        try{
+            rabbitTemplate.convertAndSend(exchange, routingKey, savedActivity);
+        } catch(Exception e){
+            log.error("Failed to publish activity to RabbitMQ: ",e);
+        }
         return mapToResponse(savedActivity);
 
     }

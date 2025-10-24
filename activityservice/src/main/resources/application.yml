@@ -5,6 +5,11 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017/athletixactivity
       database: athletixactivity
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 
 
 server:
@@ -13,3 +18,11 @@ server:
 eureka:
   client:
     defaultZone: http://localhost:8761/eureka/
+
+rabbitmq:
+  exchange:
+    name: athletix.exchange
+  queue:
+    name: activity.queue
+  routing:
+    key: activity.tracking
